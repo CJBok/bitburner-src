@@ -5,7 +5,6 @@
 import React from "react";
 import { Factions } from "../../Faction/Factions";
 
-import { formatNumber } from "../../utils/StringHelperFunctions";
 import { nFormat } from "../../ui/numeralFormat";
 import { MoneyRate } from "../../ui/React/MoneyRate";
 import { Reputation } from "../../ui/React/Reputation";
@@ -21,11 +20,11 @@ export function GangStats(): React.ReactElement {
   const territoryMult = AllGangs[gang.facName].territory * 100;
   let territoryStr;
   if (territoryMult <= 0) {
-    territoryStr = formatNumber(0, 2);
+    territoryStr = nFormat(0, 2);
   } else if (territoryMult >= 100) {
-    territoryStr = formatNumber(100, 2);
+    territoryStr = nFormat(100, 2);
   } else {
-    territoryStr = formatNumber(territoryMult, 2);
+    territoryStr = nFormat(territoryMult, 2);
   }
 
   return (
@@ -63,7 +62,7 @@ export function GangStats(): React.ReactElement {
 
       <Box display="flex">
         <Tooltip title={<Typography>Penalty for respect and money gain rates due to Wanted Level</Typography>}>
-          <Typography>Wanted Level Penalty: -{formatNumber((1 - gang.getWantedPenalty()) * 100, 2)}%</Typography>
+          <Typography>Wanted Level Penalty: -{nFormat((1 - gang.getWantedPenalty()) * 100, 2)}%</Typography>
         </Tooltip>
       </Box>
 

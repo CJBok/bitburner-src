@@ -4,6 +4,8 @@ import { Settings } from "../../Settings/Settings";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { GameOptionsPage } from "./GameOptionsPage";
 import { formatTime } from "../../utils/helpers/formatTime";
+import { initFormatters, nFormatLoaded } from "../../ui/numeralFormat";
+import { ThemeEvents } from "../../Themes/ui/Theme";
 
 export const InterfacePage = (): React.ReactElement => {
   const [timestampFormat, setTimestampFormat] = useState(Settings.TimestampsFormat);
@@ -12,13 +14,34 @@ export const InterfacePage = (): React.ReactElement => {
   function handleLocaleChange(event: SelectChangeEvent<string>): void {
     setLocale(event.target.value);
     Settings.Locale = event.target.value;
+    causeRerender();
   }
+  function causeRerender() {
+    initFormatters();
+    nFormatLoaded.emit();
+    ThemeEvents.emit();
+  }
+
   function handleTimestampFormatChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setTimestampFormat(event.target.value);
     Settings.TimestampsFormat = event.target.value;
   }
   return (
     <GameOptionsPage title="Interface">
+      <OptionSwitch
+        checked={Settings.showTrailing0}
+        onChange={(newValue) => {
+          Settings.showTrailing0 = newValue;
+          causeRerender();
+        }}
+        text="Show trailing decimal zeroes"
+        tooltip={
+          <>
+            If this is set, decimals will always show their configured number of fractional digits, even if the final
+            digit(s) are 0.
+          </>
+        }
+      />
       <OptionSwitch
         checked={Settings.DisableASCIIArt}
         onChange={(newValue) => (Settings.DisableASCIIArt = newValue)}

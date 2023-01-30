@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ActionTypes } from "../data/ActionTypes";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
-import { formatNumber, convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { Contracts } from "../data/Contracts";
 import { Bladeburner } from "../Bladeburner";
 import { Action } from "../Action";
@@ -43,8 +43,8 @@ export function ContractElem(props: IProps): React.ReactElement {
       {isActive ? (
         <>
           <Typography>
-            <CopyableText value={props.action.name} /> (IN PROGRESS - {formatNumber(computedActionTimeCurrent, 0)} /{" "}
-            {formatNumber(props.bladeburner.actionTimeToComplete, 0)})
+            <CopyableText value={props.action.name} /> (IN PROGRESS - {nFormat(computedActionTimeCurrent, 0)} /{" "}
+            {nFormat(props.bladeburner.actionTimeToComplete, 0)})
           </Typography>
           <Typography>
             {createProgressBarText({

@@ -8,12 +8,12 @@ import { Page } from "../../ui/Router";
 import { Player } from "@player";
 import { Money } from "../../ui/React/Money";
 import { Reputation } from "../../ui/React/Reputation";
-import { formatNumber } from "../../utils/StringHelperFunctions";
 import {
   calculateInfiltratorsRepReward,
   calculateSellInformationCashReward,
   calculateTradeInformationRepReward,
 } from "../formulas/victory";
+import { nFormat } from "../../ui/numeralFormat";
 
 interface IProps {
   StartingDifficulty: number;
@@ -66,7 +66,7 @@ export function Victory(props: IProps): React.ReactElement {
         You{" "}
         {isMemberOfInfiltrators ? (
           <>
-            have gained {formatNumber(infiltrationRepGain, 2)} rep for {FactionNames.ShadowsOfAnarchy} and{" "}
+            have gained {nFormat(infiltrationRepGain, 2)} rep for {FactionNames.ShadowsOfAnarchy} and{" "}
           </>
         ) : (
           <></>

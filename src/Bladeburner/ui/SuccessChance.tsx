@@ -1,10 +1,10 @@
 import React from "react";
-import { formatNumber } from "../../utils/StringHelperFunctions";
 import { StealthIcon } from "./StealthIcon";
 import { KillIcon } from "./KillIcon";
 import { Action } from "../Action";
 import { Bladeburner } from "../Bladeburner";
 import { Player } from "@player";
+import { nFormat } from "../../ui/numeralFormat";
 
 interface IProps {
   bladeburner: Bladeburner;
@@ -16,11 +16,11 @@ export function SuccessChance(props: IProps): React.ReactElement {
 
   let chance = <></>;
   if (estimatedSuccessChance[0] === estimatedSuccessChance[1]) {
-    chance = <>{formatNumber(estimatedSuccessChance[0] * 100, 1)}%</>;
+    chance = <>{nFormat(estimatedSuccessChance[0] * 100, 1)}%</>;
   } else {
     chance = (
       <>
-        {formatNumber(estimatedSuccessChance[0] * 100, 1)}% ~ {formatNumber(estimatedSuccessChance[1] * 100, 1)}%
+        {nFormat(estimatedSuccessChance[0] * 100, 1)}% ~ {nFormat(estimatedSuccessChance[1] * 100, 1)}%
       </>
     );
   }

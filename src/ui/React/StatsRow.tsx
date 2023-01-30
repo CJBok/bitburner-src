@@ -3,7 +3,6 @@ import React from "react";
 import { Typography, TableCell, TableRow } from "@mui/material";
 
 import { nFormat } from "../numeralFormat";
-import { formatNumber } from "../../utils/StringHelperFunctions";
 import { characterOverviewStyles as useStyles } from "./CharacterOverview";
 import { ClassNameMap } from "@material-ui/core/styles/withStyles";
 
@@ -28,9 +27,9 @@ export const StatsRow = ({ name, color, classes = useStyles(), children, data }:
     if (data.content !== undefined) {
       content = data.content;
     } else if (data.level !== undefined && data.exp !== undefined) {
-      content = `${formatNumber(data.level, 0)} (${nFormat(data.exp)} exp)`;
+      content = `${nFormat(data.level, 0)} (${nFormat(data.exp)} exp)`;
     } else if (data.level !== undefined && data.exp === undefined) {
-      content = `${formatNumber(data.level, 0)}`;
+      content = `${nFormat(data.level, 0)}`;
     }
   }
 

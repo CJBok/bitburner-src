@@ -7,7 +7,6 @@ import { BlackOperation } from "./BlackOperation";
 import { Operation } from "./Operation";
 import { Contract } from "./Contract";
 import { GeneralActions } from "./GeneralActions";
-import { formatNumber } from "../utils/StringHelperFunctions";
 import { Skills } from "./Skills";
 import { Skill } from "./Skill";
 import { City } from "./City";
@@ -470,7 +469,7 @@ export class Bladeburner {
             if (this.skills[skill.name] != null) {
               level = this.skills[skill.name];
             }
-            this.postToConsole(skill.name + ": Level " + formatNumber(level, 0));
+            this.postToConsole(skill.name + ": Level " + nFormat(level, 0));
           }
           this.postToConsole(" ");
           this.postToConsole("Effects: ");
@@ -478,7 +477,7 @@ export class Bladeburner {
           for (let i = 0; i < multKeys.length; ++i) {
             const mult = this.skillMultipliers[multKeys[i]];
             if (mult && mult !== 1) {
-              const mults = formatNumber(mult, 3);
+              const mults = nFormat(mult, 3);
               switch (multKeys[i]) {
                 case "successChanceAll":
                   this.postToConsole("Total Success Chance: x" + mults);
@@ -549,7 +548,7 @@ export class Bladeburner {
           if (this.skills[skill.name] !== undefined) {
             level = this.skills[skill.name];
           }
-          this.postToConsole(skill.name + ": Level " + formatNumber(level));
+          this.postToConsole(skill.name + ": Level " + nFormat(level));
         } else if (args[1].toLowerCase() === "level") {
           let currentLevel = 0;
           if (this.skills[skillName] && !isNaN(this.skills[skillName])) {
@@ -564,7 +563,7 @@ export class Bladeburner {
             this.log(skill.name + " upgraded to Level " + this.skills[skillName]);
           } else {
             this.postToConsole(
-              "You do not have enough Skill Points to upgrade this. You need " + formatNumber(pointCost, 0),
+              "You do not have enough Skill Points to upgrade this. You need " + nFormat(pointCost, 0),
             );
           }
         } else {
@@ -671,11 +670,11 @@ export class Bladeburner {
         this.postToConsole("Automation: " + (this.automateEnabled ? "enabled" : "disabled"));
         this.postToConsole(
           "When your stamina drops to " +
-            formatNumber(this.automateThreshLow, 0) +
+            nFormat(this.automateThreshLow, 0) +
             ", you will automatically switch to " +
             this.automateActionLow.name +
             ". When your stamina recovers to " +
-            formatNumber(this.automateThreshHigh, 0) +
+            nFormat(this.automateThreshHigh, 0) +
             ", you will automatically " +
             "switch to " +
             this.automateActionHigh.name +
@@ -1120,7 +1119,7 @@ export class Bladeburner {
       }
       this.teamLost += losses;
       if (this.logging.ops && losses > 0) {
-        this.log("Lost " + formatNumber(losses, 0) + " team members during this " + action.name);
+        this.log("Lost " + nFormat(losses, 0) + " team members during this " + action.name);
       }
     }
 
@@ -1317,10 +1316,10 @@ export class Bladeburner {
             }
             let logLossText = "";
             if (loss > 0) {
-              logLossText += "Lost " + formatNumber(loss, 3) + " rank. ";
+              logLossText += "Lost " + nFormat(loss, 3) + " rank. ";
             }
             if (damage > 0) {
-              logLossText += "Took " + formatNumber(damage, 0) + " damage.";
+              logLossText += "Took " + nFormat(damage, 0) + " damage.";
             }
             if (isOperation && this.logging.ops) {
               this.log(`${person.whoAmI()}: ` + action.name + " failed! " + logLossText);
@@ -1371,9 +1370,7 @@ export class Bladeburner {
             teamLossMax = Math.ceil(teamCount / 2);
 
             if (this.logging.blackops) {
-              this.log(
-                `${person.whoAmI()}: ` + action.name + " successful! Gained " + formatNumber(rankGain, 1) + " rank",
-              );
+              this.log(`${person.whoAmI()}: ` + action.name + " successful! Gained " + nFormat(rankGain, 1) + " rank");
             }
           } else {
             retValue = this.getActionStats(action, person, false);
@@ -1399,9 +1396,9 @@ export class Bladeburner {
                 `${person.whoAmI()}: ` +
                   action.name +
                   " failed! Lost " +
-                  formatNumber(rankLoss, 1) +
+                  nFormat(rankLoss, 1) +
                   " rank and took " +
-                  formatNumber(damage, 0) +
+                  nFormat(damage, 0) +
                   " damage",
               );
             }
@@ -1424,7 +1421,7 @@ export class Bladeburner {
             }
             this.teamLost += losses;
             if (this.logging.blackops) {
-              this.log(`${person.whoAmI()}:  You lost ${formatNumber(losses, 0)} team members during ${action.name}`);
+              this.log(`${person.whoAmI()}:  You lost ${nFormat(losses, 0)} team members during ${action.name}`);
             }
           }
         } catch (e: unknown) {

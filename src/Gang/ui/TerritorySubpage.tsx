@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import { Container, Button, Paper, Box, Tooltip, Switch, FormControlLabel, Typography } from "@mui/material";
 import { Help } from "@mui/icons-material";
 
-import { formatPercent } from "../../ui/numeralFormat";
-import { formatNumber } from "../../utils/StringHelperFunctions";
+import { formatPercent, nFormat } from "../../ui/numeralFormat";
 
 import { AllGangs } from "../AllGangs";
 
@@ -78,7 +77,7 @@ export function TerritorySubpage(): React.ReactElement {
 
         <Typography>
           <b>Territory Clash Chance:</b> {formatPercent(gang.territoryClashChance, 3)} <br />
-          <b>Power:</b> {formatNumber(AllGangs[gang.facName].power, 3)} <br />
+          <b>Power:</b> {nFormat(AllGangs[gang.facName].power, 3)} <br />
           <b>Territory:</b> {formatTerritory(AllGangs[gang.facName].territory)}% <br />
         </Typography>
       </Box>
@@ -101,11 +100,11 @@ function formatTerritory(n: number): string {
   const v = n * 100;
   const precision = 3;
   if (v <= 0) {
-    return formatNumber(0, precision);
+    return nFormat(0, precision);
   } else if (v >= 100) {
-    return formatNumber(100, precision);
+    return nFormat(100, precision);
   } else {
-    return formatNumber(v, precision);
+    return nFormat(v, precision);
   }
 }
 
@@ -126,7 +125,7 @@ function OtherGangTerritory(props: ITerritoryProps): React.ReactElement {
         {props.name}
       </Typography>
       <Typography>
-        <b>Power:</b> {formatNumber(power, 3)} <br />
+        <b>Power:</b> {nFormat(power, 3)} <br />
         <b>Territory:</b> {formatTerritory(territory)}% <br />
         <b>Clash Win Chance:</b> {formatPercent(clashVictoryChance, 3)}
       </Typography>

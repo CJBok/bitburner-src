@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { formatNumber, convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { BladeburnerConstants } from "../data/Constants";
 import { Player } from "@player";
 import { Money } from "../../ui/React/Money";
@@ -92,12 +92,10 @@ export function Stats(props: IProps): React.ReactElement {
             </Typography>
           </Tooltip>
         </Box>
-        <Typography>
-          Stamina Penalty: {formatNumber((1 - props.bladeburner.calculateStaminaPenalty()) * 100, 1)}%
-        </Typography>
+        <Typography>Stamina Penalty: {nFormat((1 - props.bladeburner.calculateStaminaPenalty()) * 100, 1)}%</Typography>
         <br />
-        <Typography>Team Size: {formatNumber(props.bladeburner.teamSize, 0)}</Typography>
-        <Typography>Team Members Lost: {formatNumber(props.bladeburner.teamLost, 0)}</Typography>
+        <Typography>Team Size: {nFormat(props.bladeburner.teamSize, 0)}</Typography>
+        <Typography>Team Members Lost: {nFormat(props.bladeburner.teamLost, 0)}</Typography>
         <br />
         <Typography>Num Times Hospitalized: {props.bladeburner.numHosp}</Typography>
         <Typography>
@@ -126,7 +124,7 @@ export function Stats(props: IProps): React.ReactElement {
               </Typography>
             }
           >
-            <Typography>Synthoid Communities: {formatNumber(props.bladeburner.getCurrentCity().comms, 0)}</Typography>
+            <Typography>Synthoid Communities: {nFormat(props.bladeburner.getCurrentCity().comms, 0)}</Typography>
           </Tooltip>
         </Box>
         <Box display="flex">
@@ -167,13 +165,13 @@ export function Stats(props: IProps): React.ReactElement {
         <Typography>Skill Points: {nFormat(props.bladeburner.skillPoints)}</Typography>
         <br />
         <Typography>
-          Aug. Success Chance mult: {formatNumber(Player.mults.bladeburner_success_chance * 100, 1)}%
+          Aug. Success Chance mult: {nFormat(Player.mults.bladeburner_success_chance * 100, 1)}%
           <br />
-          Aug. Max Stamina mult: {formatNumber(Player.mults.bladeburner_max_stamina * 100, 1)}%
+          Aug. Max Stamina mult: {nFormat(Player.mults.bladeburner_max_stamina * 100, 1)}%
           <br />
-          Aug. Stamina Gain mult: {formatNumber(Player.mults.bladeburner_stamina_gain * 100, 1)}%
+          Aug. Stamina Gain mult: {nFormat(Player.mults.bladeburner_stamina_gain * 100, 1)}%
           <br />
-          Aug. Field Analysis mult: {formatNumber(Player.mults.bladeburner_analysis * 100, 1)}%
+          Aug. Field Analysis mult: {nFormat(Player.mults.bladeburner_analysis * 100, 1)}%
         </Typography>
       </Box>
     </Paper>

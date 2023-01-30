@@ -22,10 +22,10 @@ import { Player } from "@player";
 import { AugmentationNames } from "../data/AugmentationNames";
 import { StaticAugmentations } from "../StaticAugmentations";
 import { CONSTANTS } from "../../Constants";
-import { formatNumber } from "../../utils/StringHelperFunctions";
 import { Info } from "@mui/icons-material";
 import { Link } from "@mui/material";
 import { AlertEvents } from "../../ui/React/AlertManager";
+import { nFormat } from "../../ui/numeralFormat";
 
 const NeuroFluxDisplay = (): React.ReactElement => {
   const level = Player.augmentations.find((e) => e.name === AugmentationNames.NeuroFluxGovernor)?.level ?? 0;
@@ -68,7 +68,7 @@ const EntropyDisplay = (): React.ReactElement => {
         Entropy Virus - Level {Player.entropy}
       </Typography>
       <Typography color={Settings.theme.error}>
-        <b>All multipliers decreased by:</b> {formatNumber((1 - CONSTANTS.EntropyEffect ** Player.entropy) * 100, 3)}%
+        <b>All multipliers decreased by:</b> {nFormat((1 - CONSTANTS.EntropyEffect ** Player.entropy) * 100, 3)}%
         (multiplicative)
       </Typography>
     </Paper>

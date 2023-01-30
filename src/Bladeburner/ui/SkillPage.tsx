@@ -70,7 +70,7 @@ var multKeys = Object.keys(this.skillMultipliers);
 for (var i = 0; i < multKeys.length; ++i) {
     var mult = this.skillMultipliers[multKeys[i]];
     if (mult && mult !== 1) {
-        mult = formatNumber(mult, 3);
+        mult = nFormat(mult, 3);
         switch(multKeys[i]) {
 
         }
