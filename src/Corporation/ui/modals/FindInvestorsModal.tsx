@@ -1,5 +1,5 @@
 import React from "react";
-import { numeralWrapper } from "../../../ui/numeralFormat";
+import { formatMoney, formatPercent, nFormat } from "../../../ui/numeralFormat";
 import * as corpConstants from "../../data/Constants";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation } from "../Context";
@@ -37,15 +37,12 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        An investment firm has offered you {numeralWrapper.formatMoney(funding)} in funding in exchange for a{" "}
-        {numeralWrapper.format(percShares * 100, "0.000a")}% stake in the company (
-        {numeralWrapper.format(investShares, "0.000a")} shares).
-        <br />
-        <br />
-        Do you accept or reject this offer?
-        <br />
-        <br />
-        Hint: Investment firms will offer more money if your corporation is turning a profit
+        {`An investment firm has offered you ${formatMoney(funding)} in funding in exchange for a ${formatPercent(
+          percShares * 100,
+        )} stake in the company (
+        ${nFormat(investShares)} shares).\n\n` +
+          "Do you accept or reject this offer?\n\n" +
+          "Hint: Investment firms will offer more money if your corporation is turning a profit"}
       </Typography>
       <Button onClick={findInvestors}>Accept</Button>
     </Modal>

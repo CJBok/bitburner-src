@@ -19,7 +19,7 @@ import { ConsoleHelpText } from "./data/Help";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { BladeburnerConstants } from "./data/Constants";
-import { numeralWrapper } from "../ui/numeralFormat";
+import { nFormat, formatMoney, formatPercent } from "../ui/numeralFormat";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { addOffset } from "../utils/helpers/addOffset";
 import { Factions, factionExists } from "../Faction/Factions";
@@ -1287,15 +1287,11 @@ export class Bladeburner {
               const gain = addOffset(action.rankGain * rewardMultiplier * BitNodeMultipliers.BladeburnerRank, 10);
               this.changeRank(person, gain);
               if (isOperation && this.logging.ops) {
-                this.log(
-                  `${person.whoAmI()}: ${
-                    action.name
-                  } successfully completed! Gained ${numeralWrapper.formatReallyBigNumber(gain)} rank`,
-                );
+                this.log(`${person.whoAmI()}: ${action.name} successfully completed! Gained ${nFormat(gain)} rank`);
               } else if (!isOperation && this.logging.contracts) {
                 this.log(
                   `${person.whoAmI()}: ${action.name} contract successfully completed! Gained ` +
-                    `${numeralWrapper.formatReallyBigNumber(gain)} rank and ${numeralWrapper.formatMoney(moneyGain)}`,
+                    `${nFormat(gain)} rank and ${formatMoney(moneyGain)}`,
                 );
               }
             }
@@ -1452,15 +1448,15 @@ export class Bladeburner {
           this.log(
             `${person.whoAmI()}: ` +
               "Training completed. Gained: " +
-              numeralWrapper.formatExp(strExpGain) +
+              nFormat(strExpGain) +
               " str exp, " +
-              numeralWrapper.formatExp(defExpGain) +
+              nFormat(defExpGain) +
               " def exp, " +
-              numeralWrapper.formatExp(dexExpGain) +
+              nFormat(dexExpGain) +
               " dex exp, " +
-              numeralWrapper.formatExp(agiExpGain) +
+              nFormat(agiExpGain) +
               " agi exp, " +
-              numeralWrapper.formatReallyBigNumber(staminaGain) +
+              nFormat(staminaGain) +
               " max stamina",
           );
         }
@@ -1488,9 +1484,9 @@ export class Bladeburner {
         if (this.logging.general) {
           this.log(
             `${person.whoAmI()}: ` +
-              `Field analysis completed. Gained ${numeralWrapper.formatReallyBigNumber(rankGain)} rank, ` +
-              `${numeralWrapper.formatExp(hackingExpGain)} hacking exp, and ` +
-              `${numeralWrapper.formatExp(charismaExpGain)} charisma exp`,
+              `Field analysis completed. Gained ${nFormat(rankGain)} rank, ` +
+              `${nFormat(hackingExpGain)} hacking exp, and ` +
+              `${nFormat(charismaExpGain)} charisma exp`,
           );
         }
         break;
@@ -1506,7 +1502,7 @@ export class Bladeburner {
             this.log(
               `${person.whoAmI()}: ` +
                 "Successfully recruited a team member! Gained " +
-                numeralWrapper.formatExp(expGain) +
+                nFormat(expGain) +
                 " charisma exp",
             );
           }
@@ -1515,10 +1511,7 @@ export class Bladeburner {
           retValue.chaExp = expGain;
           if (this.logging.general) {
             this.log(
-              `${person.whoAmI()}: ` +
-                "Failed to recruit a team member. Gained " +
-                numeralWrapper.formatExp(expGain) +
-                " charisma exp",
+              `${person.whoAmI()}: ` + "Failed to recruit a team member. Gained " + nFormat(expGain) + " charisma exp",
             );
           }
         }
@@ -1532,7 +1525,7 @@ export class Bladeburner {
         }
         if (this.logging.general) {
           this.log(
-            `${person.whoAmI()}: Diplomacy completed. Chaos levels in the current city fell by ${numeralWrapper.formatPercentage(
+            `${person.whoAmI()}: Diplomacy completed. Chaos levels in the current city fell by ${formatPercent(
               1 - eff,
             )}`,
           );
@@ -1548,7 +1541,7 @@ export class Bladeburner {
           this.log(
             `${person.whoAmI()}: Rested in Hyperbolic Regeneration Chamber. Restored ${
               BladeburnerConstants.HrcHpGain
-            } HP and gained ${numeralWrapper.formatStamina(staminaGain)} stamina`,
+            } HP and gained ${nFormat(staminaGain)} stamina`,
           );
         }
         break;

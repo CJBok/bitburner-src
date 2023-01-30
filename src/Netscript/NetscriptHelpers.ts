@@ -3,7 +3,7 @@ import { WorkerScript } from "./WorkerScript";
 import { GetAllServers, GetServer } from "../Server/AllServers";
 import { Player } from "@player";
 import { ScriptDeath } from "./ScriptDeath";
-import { numeralWrapper } from "../ui/numeralFormat";
+import { formatInt, formatMoney, nFormat, numeralWrapper } from "../ui/numeralFormat";
 import { ScriptArg } from "./ScriptArg";
 import { CityName } from "../Enums";
 import { BasicHGWOptions, RunningScript as IRunningScript, Person as IPerson } from "@nsdefs";
@@ -448,7 +448,7 @@ function hack(
       `Executing on '${server.hostname}' in ${convertTimeMsToTimeElapsedString(
         hackingTime * 1000,
         true,
-      )} (t=${numeralWrapper.formatThreads(threads)})`,
+      )} (t=${formatInt(threads)})`,
   );
 
   return helpers.netscriptDelay(ctx, hackingTime * 1000).then(function () {
@@ -495,9 +495,9 @@ function hack(
       log(
         ctx,
         () =>
-          `Successfully hacked '${server.hostname}' for ${numeralWrapper.formatMoney(
-            moneyGained,
-          )} and ${numeralWrapper.formatExp(expGainedOnSuccess)} exp (t=${numeralWrapper.formatThreads(threads)})`,
+          `Successfully hacked '${server.hostname}' for ${formatMoney(moneyGained)} and ${nFormat(
+            expGainedOnSuccess,
+          )} exp (t=${formatInt(threads)})`,
       );
       server.fortify(CONSTANTS.ServerFortifyAmount * Math.min(threads, maxThreadNeeded));
       if (stock) {
@@ -514,9 +514,7 @@ function hack(
       log(
         ctx,
         () =>
-          `Failed to hack '${server.hostname}'. Gained ${numeralWrapper.formatExp(
-            expGainedOnFailure,
-          )} exp (t=${numeralWrapper.formatThreads(threads)})`,
+          `Failed to hack '${server.hostname}'. Gained ${nFormat(expGainedOnFailure)} exp (t=${formatInt(threads)})`,
       );
       return 0;
     }

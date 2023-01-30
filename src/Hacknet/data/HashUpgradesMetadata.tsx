@@ -1,7 +1,7 @@
 // Metadata used to construct all Hash Upgrades
 import React from "react";
 import { IConstructorParams } from "../HashUpgrade";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatInt } from "../../ui/numeralFormat";
 import { Money } from "../../ui/React/Money";
 
 export const HashUpgradesMetadata: IConstructorParams[] = [
@@ -10,7 +10,7 @@ export const HashUpgradesMetadata: IConstructorParams[] = [
     costPerLevel: 4,
     desc: "Sell hashes for $1m",
     name: "Sell for Money",
-    effectText: (level: number): JSX.Element | null => (
+    effectText: (level) => (
       <>
         Sold for <Money money={1e6 * level} />
       </>
@@ -21,7 +21,7 @@ export const HashUpgradesMetadata: IConstructorParams[] = [
     costPerLevel: 100,
     desc: "Sell hashes for $1b in Corporation funds",
     name: "Sell for Corporation Funds",
-    effectText: (level: number): JSX.Element | null => (
+    effectText: (level) => (
       <>
         Sold for <Money money={1e9 * level} /> Corporation funds.
       </>
@@ -55,7 +55,7 @@ export const HashUpgradesMetadata: IConstructorParams[] = [
       "Use hashes to improve the experience earned when studying at a university by 20%. " +
       "This effect persists until you install Augmentations",
     name: "Improve Studying",
-    effectText: (level: number): JSX.Element | null => <>Improves studying by {level * 20}%</>,
+    effectText: (level) => <>{`Improves studying by ${level * 20}%`}</>,
     value: 20, // Improves studying by value%
   },
   {
@@ -64,41 +64,35 @@ export const HashUpgradesMetadata: IConstructorParams[] = [
       "Use hashes to improve the experience earned when training at the gym by 20%. This effect " +
       "persists until you install Augmentations",
     name: "Improve Gym Training",
-    effectText: (level: number): JSX.Element | null => <>Improves training by {level * 20}%</>,
+    effectText: (level) => <>{`Improves training by ${level * 20}%`}</>,
     value: 20, // Improves training by value%
   },
   {
     costPerLevel: 200,
     desc: "Exchange hashes for 1k Scientific Research in all of your Corporation's Industries",
     name: "Exchange for Corporation Research",
-    effectText: (level: number): JSX.Element | null => (
-      <>Acquired a total of {level}k Scientific Research in your industries.</>
-    ),
+    effectText: (level) => <>{`Acquired a total of ${level}k Scientific Research in your industries.`}</>,
     value: 1000,
   },
   {
     costPerLevel: 250,
     desc: "Exchange hashes for 100 Bladeburner Rank",
     name: "Exchange for Bladeburner Rank",
-    effectText: (level: number): JSX.Element | null => (
-      <>Acquired a total of {numeralWrapper.format(100 * level, "0a")} Bladeburner rank</>
-    ),
+    effectText: (level) => <>{`Acquired a total of ${formatInt(100 * level)} Bladeburner rank`}</>,
     value: 100,
   },
   {
     costPerLevel: 250,
     desc: "Exchanges hashes for 10 Bladeburner Skill Points",
     name: "Exchange for Bladeburner SP",
-    effectText: (level: number): JSX.Element | null => (
-      <>Acquired a total of {numeralWrapper.format(10 * level, "0a")} Bladeburner Skill Points</>
-    ),
+    effectText: (level) => <>{`Acquired a total of ${formatInt(10 * level)} Bladeburner Skill Points`}</>,
     value: 10,
   },
   {
     costPerLevel: 200,
     desc: "Generate a random Coding Contract somewhere on the network",
     name: "Generate Coding Contract",
-    effectText: (level: number): JSX.Element | null => <>Generated {level} contracts.</>,
+    effectText: (level) => <>{`Generated ${level} contracts.`}</>,
     value: 1,
   },
 ];

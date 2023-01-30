@@ -9,7 +9,7 @@ import { ProductElem } from "./ProductElem";
 import { MaterialElem } from "./MaterialElem";
 import { MaterialInfo } from "../MaterialInfo";
 
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { nFormat } from "../../ui/numeralFormat";
 
 import { Corporation } from "../Corporation";
 import { Industry } from "../Industry";
@@ -126,7 +126,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
     if (mat.qty === 0) continue;
     breakdownItems.push(
       <>
-        {matName}: {numeralWrapper.format(mat.qty * MaterialInfo[matName].size, "0,0.0")}
+        {matName}: {nFormat(mat.qty * MaterialInfo[matName].size)}
       </>,
     );
   }
@@ -136,7 +136,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
     if (prod === undefined) continue;
     breakdownItems.push(
       <>
-        {prodName}: {numeralWrapper.format(prod.data[props.warehouse.loc][0] * prod.siz, "0,0.0")}
+        {prodName}: {nFormat(prod.data[props.warehouse.loc][0] * prod.siz)}
       </>,
     );
   }
@@ -160,20 +160,9 @@ function WarehouseRoot(props: IProps): React.ReactElement {
   return (
     <Paper>
       <Box display="flex" alignItems="center">
-        <Tooltip
-          title={
-            props.warehouse.sizeUsed !== 0 ? (
-              <Typography>
-                <>{breakdown}</>
-              </Typography>
-            ) : (
-              ""
-            )
-          }
-        >
+        <Tooltip title={props.warehouse.sizeUsed !== 0 ? <Typography>{breakdown}</Typography> : ""}>
           <Typography color={props.warehouse.sizeUsed >= props.warehouse.size ? "error" : "primary"}>
-            Storage: {numeralWrapper.formatBigNumber(props.warehouse.sizeUsed)} /{" "}
-            {numeralWrapper.formatBigNumber(props.warehouse.size)}
+            {`Storage: ${nFormat(props.warehouse.sizeUsed)} / ${nFormat(props.warehouse.size)}`}
           </Typography>
         </Tooltip>
       </Box>

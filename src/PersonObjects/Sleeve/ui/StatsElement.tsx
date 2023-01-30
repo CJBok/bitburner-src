@@ -4,7 +4,7 @@ import { Typography, Table, TableBody, TableCell, TableRow } from "@mui/material
 
 import { CONSTANTS } from "../../../Constants";
 
-import { numeralWrapper } from "../../../ui/numeralFormat";
+import { formatInt, nFormat } from "../../../ui/numeralFormat";
 import { Settings } from "../../../Settings/Settings";
 import { StatsRow } from "../../../ui/React/StatsRow";
 import { characterOverviewStyles as useStyles } from "../../../ui/React/CharacterOverview";
@@ -35,9 +35,7 @@ export function StatsElement(props: IProps): React.ReactElement {
           name="HP"
           color={Settings.theme.hp}
           data={{
-            content: `${numeralWrapper.formatHp(props.sleeve.hp.current)} / ${numeralWrapper.formatHp(
-              props.sleeve.hp.max,
-            )}`,
+            content: `${formatInt(props.sleeve.hp.current)} / ${formatInt(props.sleeve.hp.max)}`,
           }}
         />
         <StatsRow
@@ -75,21 +73,9 @@ export function StatsElement(props: IProps): React.ReactElement {
             <br />
           </TableCell>
         </TableRow>
-        <StatsRow
-          name="Shock"
-          color={Settings.theme.primary}
-          data={{ content: numeralWrapper.formatSleeveShock(props.sleeve.shock) }}
-        />
-        <StatsRow
-          name="Sync"
-          color={Settings.theme.primary}
-          data={{ content: numeralWrapper.formatSleeveSynchro(props.sleeve.sync) }}
-        />
-        <StatsRow
-          name="Memory"
-          color={Settings.theme.primary}
-          data={{ content: numeralWrapper.formatSleeveMemory(props.sleeve.memory) }}
-        />
+        <StatsRow name="Shock" color={Settings.theme.primary} data={{ content: nFormat(props.sleeve.shock) }} />
+        <StatsRow name="Sync" color={Settings.theme.primary} data={{ content: nFormat(props.sleeve.sync) }} />
+        <StatsRow name="Memory" color={Settings.theme.primary} data={{ content: formatInt(props.sleeve.memory) }} />
       </TableBody>
     </Table>
   );
@@ -103,36 +89,36 @@ export function EarningsElement(props: IProps): React.ReactElement {
     const gains = props.sleeve.currentWork.getExp(props.sleeve);
     data = [
       [`Money:`, <Money money={gains.money} />],
-      [`Hacking Exp:`, `${numeralWrapper.formatExp(gains.hackExp)}`],
-      [`Strength Exp:`, `${numeralWrapper.formatExp(gains.strExp)}`],
-      [`Defense Exp:`, `${numeralWrapper.formatExp(gains.defExp)}`],
-      [`Dexterity Exp:`, `${numeralWrapper.formatExp(gains.dexExp)}`],
-      [`Agility Exp:`, `${numeralWrapper.formatExp(gains.agiExp)}`],
-      [`Charisma Exp:`, `${numeralWrapper.formatExp(gains.chaExp)}`],
+      [`Hacking Exp:`, `${nFormat(gains.hackExp)}`],
+      [`Strength Exp:`, `${nFormat(gains.strExp)}`],
+      [`Defense Exp:`, `${nFormat(gains.defExp)}`],
+      [`Dexterity Exp:`, `${nFormat(gains.dexExp)}`],
+      [`Agility Exp:`, `${nFormat(gains.agiExp)}`],
+      [`Charisma Exp:`, `${nFormat(gains.chaExp)}`],
     ];
   }
   if (isSleeveClassWork(props.sleeve.currentWork)) {
     const rates = props.sleeve.currentWork.calculateRates(props.sleeve);
     data = [
       [`Money:`, <MoneyRate money={CYCLES_PER_SEC * rates.money} />],
-      [`Hacking Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.hackExp)} / sec`],
-      [`Strength Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.strExp)} / sec`],
-      [`Defense Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.defExp)} / sec`],
-      [`Dexterity Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.dexExp)} / sec`],
-      [`Agility Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.agiExp)} / sec`],
-      [`Charisma Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.chaExp)} / sec`],
+      [`Hacking Exp:`, `${nFormat(CYCLES_PER_SEC * rates.hackExp)} / sec`],
+      [`Strength Exp:`, `${nFormat(CYCLES_PER_SEC * rates.strExp)} / sec`],
+      [`Defense Exp:`, `${nFormat(CYCLES_PER_SEC * rates.defExp)} / sec`],
+      [`Dexterity Exp:`, `${nFormat(CYCLES_PER_SEC * rates.dexExp)} / sec`],
+      [`Agility Exp:`, `${nFormat(CYCLES_PER_SEC * rates.agiExp)} / sec`],
+      [`Charisma Exp:`, `${nFormat(CYCLES_PER_SEC * rates.chaExp)} / sec`],
     ];
   }
   if (isSleeveFactionWork(props.sleeve.currentWork)) {
     const rates = props.sleeve.currentWork.getExpRates(props.sleeve);
     const repGain = props.sleeve.currentWork.getReputationRate(props.sleeve);
     data = [
-      [`Hacking Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.hackExp)} / sec`],
-      [`Strength Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.strExp)} / sec`],
-      [`Defense Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.defExp)} / sec`],
-      [`Dexterity Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.dexExp)} / sec`],
-      [`Agility Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.agiExp)} / sec`],
-      [`Charisma Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.chaExp)} / sec`],
+      [`Hacking Exp:`, `${nFormat(CYCLES_PER_SEC * rates.hackExp)} / sec`],
+      [`Strength Exp:`, `${nFormat(CYCLES_PER_SEC * rates.strExp)} / sec`],
+      [`Defense Exp:`, `${nFormat(CYCLES_PER_SEC * rates.defExp)} / sec`],
+      [`Dexterity Exp:`, `${nFormat(CYCLES_PER_SEC * rates.dexExp)} / sec`],
+      [`Agility Exp:`, `${nFormat(CYCLES_PER_SEC * rates.agiExp)} / sec`],
+      [`Charisma Exp:`, `${nFormat(CYCLES_PER_SEC * rates.chaExp)} / sec`],
       [`Reputation:`, <ReputationRate reputation={CYCLES_PER_SEC * repGain} />],
     ];
   }
@@ -141,12 +127,12 @@ export function EarningsElement(props: IProps): React.ReactElement {
     const rates = props.sleeve.currentWork.getGainRates(props.sleeve);
     data = [
       [`Money:`, <MoneyRate money={CYCLES_PER_SEC * rates.money} />],
-      [`Hacking Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.hackExp)} / sec`],
-      [`Strength Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.strExp)} / sec`],
-      [`Defense Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.defExp)} / sec`],
-      [`Dexterity Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.dexExp)} / sec`],
-      [`Agility Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.agiExp)} / sec`],
-      [`Charisma Exp:`, `${numeralWrapper.formatExp(CYCLES_PER_SEC * rates.chaExp)} / sec`],
+      [`Hacking Exp:`, `${nFormat(CYCLES_PER_SEC * rates.hackExp)} / sec`],
+      [`Strength Exp:`, `${nFormat(CYCLES_PER_SEC * rates.strExp)} / sec`],
+      [`Defense Exp:`, `${nFormat(CYCLES_PER_SEC * rates.defExp)} / sec`],
+      [`Dexterity Exp:`, `${nFormat(CYCLES_PER_SEC * rates.dexExp)} / sec`],
+      [`Agility Exp:`, `${nFormat(CYCLES_PER_SEC * rates.agiExp)} / sec`],
+      [`Charisma Exp:`, `${nFormat(CYCLES_PER_SEC * rates.chaExp)} / sec`],
       [`Reputation:`, <ReputationRate reputation={CYCLES_PER_SEC * rates.reputation} />],
     ];
   }

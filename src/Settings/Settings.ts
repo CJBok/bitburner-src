@@ -85,6 +85,8 @@ export const Settings = {
   MonacoVim: false,
   /** Word wrap setting for Script Editor. */
   MonacoWordWrap: "off" as WordWrapOptions,
+  /** Whether to always show decimal places, even if they are 0's. Todo: add ui for changing this value, inform player that they have to reload to save changes */
+  showTrailing0: false,
 
   load(saveString: string) {
     const save = JSON.parse(saveString);

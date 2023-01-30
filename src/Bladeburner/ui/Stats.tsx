@@ -3,7 +3,7 @@ import { formatNumber, convertTimeMsToTimeElapsedString } from "../../utils/Stri
 import { BladeburnerConstants } from "../data/Constants";
 import { Player } from "@player";
 import { Money } from "../../ui/React/Money";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { nFormat } from "../../ui/numeralFormat";
 import { Factions } from "../../Faction/Factions";
 import { Router } from "../../ui/GameRoot";
 import { joinFaction } from "../../Faction/FactionHelpers";
@@ -59,7 +59,7 @@ export function Stats(props: IProps): React.ReactElement {
         </Box>
         <Box display="flex">
           <Tooltip title={<Typography>Your rank within the Bladeburner division.</Typography>}>
-            <Typography>Rank: {numeralWrapper.formatReallyBigNumber(props.bladeburner.rank)}</Typography>
+            <Typography>Rank: {nFormat(props.bladeburner.rank)}</Typography>
           </Tooltip>
         </Box>
         <br />
@@ -88,8 +88,7 @@ export function Stats(props: IProps): React.ReactElement {
             }
           >
             <Typography>
-              Stamina: {numeralWrapper.formatReallyBigNumber(props.bladeburner.stamina)} /{" "}
-              {numeralWrapper.formatReallyBigNumber(props.bladeburner.maxStamina)}
+              Stamina: {nFormat(props.bladeburner.stamina)} / {nFormat(props.bladeburner.maxStamina)}
             </Typography>
           </Tooltip>
         </Box>
@@ -115,9 +114,7 @@ export function Stats(props: IProps): React.ReactElement {
               </Typography>
             }
           >
-            <Typography>
-              Est. Synthoid Population: {numeralWrapper.formatPopulation(props.bladeburner.getCurrentCity().popEst)}
-            </Typography>
+            <Typography>Est. Synthoid Population: {nFormat(props.bladeburner.getCurrentCity().popEst)}</Typography>
           </Tooltip>
         </Box>
         <Box display="flex">
@@ -141,9 +138,7 @@ export function Stats(props: IProps): React.ReactElement {
               </Typography>
             }
           >
-            <Typography>
-              City Chaos: {numeralWrapper.formatReallyBigNumber(props.bladeburner.getCurrentCity().chaos)}
-            </Typography>
+            <Typography>City Chaos: {nFormat(props.bladeburner.getCurrentCity().chaos)}</Typography>
           </Tooltip>
         </Box>
         <br />
@@ -169,7 +164,7 @@ export function Stats(props: IProps): React.ReactElement {
             <br />
           </>
         )}
-        <Typography>Skill Points: {numeralWrapper.formatReallyBigNumber(props.bladeburner.skillPoints)}</Typography>
+        <Typography>Skill Points: {nFormat(props.bladeburner.skillPoints)}</Typography>
         <br />
         <Typography>
           Aug. Success Chance mult: {formatNumber(Player.mults.bladeburner_success_chance * 100, 1)}%

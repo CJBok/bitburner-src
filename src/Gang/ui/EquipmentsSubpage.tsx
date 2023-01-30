@@ -10,7 +10,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { MenuItem, Table, TableBody, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatPercent, nFormat } from "../../ui/numeralFormat";
 import { GangMemberUpgrades } from "../GangMemberUpgrades";
 import { GangMemberUpgrade } from "../GangMemberUpgrade";
 import { Money } from "../../ui/React/Money";
@@ -142,29 +142,23 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
           <Tooltip
             title={
               <Typography>
-                Hk: x{numeralWrapper.formatMultiplier(props.member.hack_mult * asc.hack)}(x
-                {numeralWrapper.formatMultiplier(props.member.hack_mult)} Eq, x
-                {numeralWrapper.formatMultiplier(asc.hack)} Asc)
+                Hk: x{nFormat(props.member.hack_mult * asc.hack, 2)}(x
+                {nFormat(props.member.hack_mult, 2)} Eq, x{nFormat(asc.hack, 2)} Asc)
                 <br />
-                St: x{numeralWrapper.formatMultiplier(props.member.str_mult * asc.str)}
-                (x{numeralWrapper.formatMultiplier(props.member.str_mult)} Eq, x
-                {numeralWrapper.formatMultiplier(asc.str)} Asc)
+                St: x{nFormat(props.member.str_mult * asc.str, 2)}
+                (x{nFormat(props.member.str_mult, 2)} Eq, x{nFormat(asc.str, 2)} Asc)
                 <br />
-                Df: x{numeralWrapper.formatMultiplier(props.member.def_mult * asc.def)}
-                (x{numeralWrapper.formatMultiplier(props.member.def_mult)} Eq, x
-                {numeralWrapper.formatMultiplier(asc.def)} Asc)
+                Df: x{nFormat(props.member.def_mult * asc.def, 2)}
+                (x{nFormat(props.member.def_mult, 2)} Eq, x{nFormat(asc.def, 2)} Asc)
                 <br />
-                Dx: x{numeralWrapper.formatMultiplier(props.member.dex_mult * asc.dex)}
-                (x{numeralWrapper.formatMultiplier(props.member.dex_mult)} Eq, x
-                {numeralWrapper.formatMultiplier(asc.dex)} Asc)
+                Dx: x{nFormat(props.member.dex_mult * asc.dex, 2)}
+                (x{nFormat(props.member.dex_mult, 2)} Eq, x{nFormat(asc.dex, 2)} Asc)
                 <br />
-                Ag: x{numeralWrapper.formatMultiplier(props.member.agi_mult * asc.agi)}
-                (x{numeralWrapper.formatMultiplier(props.member.agi_mult)} Eq, x
-                {numeralWrapper.formatMultiplier(asc.agi)} Asc)
+                Ag: x{nFormat(props.member.agi_mult * asc.agi, 2)}
+                (x{nFormat(props.member.agi_mult, 2)} Eq, x{nFormat(asc.agi, 2)} Asc)
                 <br />
-                Ch: x{numeralWrapper.formatMultiplier(props.member.cha_mult * asc.cha)}
-                (x{numeralWrapper.formatMultiplier(props.member.cha_mult)} Eq, x
-                {numeralWrapper.formatMultiplier(asc.cha)} Asc)
+                Ch: x{nFormat(props.member.cha_mult * asc.cha, 2)}
+                (x{nFormat(props.member.cha_mult, 2)} Eq, x{nFormat(asc.cha, 2)} Asc)
               </Typography>
             }
           >
@@ -262,7 +256,7 @@ export function EquipmentsSubpage(): React.ReactElement {
           </Typography>
         }
       >
-        <Typography sx={{ m: 1 }}>Discount: -{numeralWrapper.formatPercentage(1 - 1 / gang.getDiscount())}</Typography>
+        <Typography sx={{ m: 1 }}>Discount: -{formatPercent(1 - 1 / gang.getDiscount())}</Typography>
       </Tooltip>
 
       <TextField

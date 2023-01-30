@@ -3,7 +3,7 @@ import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { MaterialInfo } from "../../MaterialInfo";
 import { Warehouse } from "../../Warehouse";
 import { Material } from "../../Material";
-import { numeralWrapper } from "../../../ui/numeralFormat";
+import { formatMoney, nFormat } from "../../../ui/numeralFormat";
 import { BulkPurchase, BuyMaterial } from "../../Actions";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation, useDivision } from "../Context";
@@ -38,27 +38,16 @@ function BulkPurchaseSection(props: IBPProps): React.ReactElement {
 
     if (parsedAmt > maxAmount) {
       setDisabled(true);
-      return (
-        <>
-          <Typography color={"error"}>Not enough warehouse space to purchase this amount</Typography>
-        </>
-      );
+      return <Typography color={"error"}>Not enough warehouse space to purchase this amount</Typography>;
     } else if (isNaN(cost) || parsedAmt < 0) {
       setDisabled(true);
-      return (
-        <>
-          <Typography color={"error"}>Invalid input for Bulk Purchase amount</Typography>
-        </>
-      );
+      return <Typography color={"error"}>Invalid input for Bulk Purchase amount</Typography>;
     } else {
       setDisabled(false);
       return (
-        <>
-          <Typography>
-            Purchasing {numeralWrapper.format(parsedAmt, "0,0.00")} of {props.mat.name} will cost{" "}
-            {numeralWrapper.formatMoney(cost)}
-          </Typography>
-        </>
+        <Typography>
+          {`Purchasing ${nFormat(parsedAmt, 2)} of ${props.mat.name} will cost ${formatMoney(cost)}`}
+        </Typography>
       );
     }
   }

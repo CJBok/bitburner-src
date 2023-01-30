@@ -4,7 +4,7 @@
  */
 import * as React from "react";
 
-import { numeralWrapper } from "../numeralFormat";
+import { formatInt, nFormat } from "../numeralFormat";
 
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
@@ -73,7 +73,7 @@ export function RecentScriptAccordion(props: IProps): React.ReactElement {
                   <Typography>└ Threads:</Typography>
                 </TableCell>
                 <TableCell className={classes.noborder}>
-                  <Typography>{numeralWrapper.formatThreads(recentScript.runningScript.threads)}</Typography>
+                  <Typography>{formatInt(recentScript.runningScript.threads)}</Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -114,9 +114,7 @@ export function RecentScriptAccordion(props: IProps): React.ReactElement {
               <TableRow>
                 <TableCell className={classes.noborder} colSpan={1} />
                 <TableCell className={classes.noborder} align="left">
-                  <Typography>
-                    &nbsp;{numeralWrapper.formatExp(recentScript.runningScript.onlineExpGained) + " hacking exp"}
-                  </Typography>
+                  <Typography>&nbsp;{nFormat(recentScript.runningScript.onlineExpGained) + " hacking exp"}</Typography>
                 </TableCell>
               </TableRow>
 
@@ -133,7 +131,7 @@ export function RecentScriptAccordion(props: IProps): React.ReactElement {
               <TableRow>
                 <TableCell className={classes.noborder} colSpan={1} />
                 <TableCell className={classes.noborder} align="left">
-                  <Typography>&nbsp;{numeralWrapper.formatExp(onlineEps) + " hacking exp / sec"}</Typography>
+                  <Typography>&nbsp;{nFormat(onlineEps) + " hacking exp / sec"}</Typography>
                 </TableCell>
               </TableRow>
 
@@ -150,9 +148,7 @@ export function RecentScriptAccordion(props: IProps): React.ReactElement {
               <TableRow>
                 <TableCell className={classes.noborder} colSpan={1} />
                 <TableCell className={classes.noborder} align="left">
-                  <Typography>
-                    &nbsp;{numeralWrapper.formatExp(recentScript.runningScript.offlineExpGained) + " hacking exp"}
-                  </Typography>
+                  <Typography>&nbsp;{nFormat(recentScript.runningScript.offlineExpGained) + " hacking exp"}</Typography>
                 </TableCell>
               </TableRow>
             </TableBody>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { numeralWrapper } from "../../../ui/numeralFormat";
+import { formatPercent, nFormat } from "../../../ui/numeralFormat";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { OfficeSpace } from "../../OfficeSpace";
 import { ThrowParty } from "../../Actions";
@@ -43,10 +43,9 @@ export function ThrowPartyModal(props: IProps): React.ReactElement {
 
       if (mult > 0) {
         dialogBoxCreate(
-          "You threw a party for the office! The morale and happiness of each employee increased by " +
-            numeralWrapper.formatPercentage(increase) +
-            " and was multiplied by " +
-            numeralWrapper.formatMultiplier(mult),
+          `You threw a party for the office! The morale and happiness of each employee increased by ${formatPercent(
+            increase,
+          )} and was multiplied by ${nFormat(mult, 2)}`,
         );
       }
 

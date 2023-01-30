@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal } from "../../../ui/React/Modal";
-import { numeralWrapper } from "../../../ui/numeralFormat";
+import { formatMoney, nFormat } from "../../../ui/numeralFormat";
 import { Player } from "@player";
 import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
@@ -42,23 +42,16 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
     props.rerender();
   }
 
-  function CostIndicator(): React.ReactElement {
-    if (shares === null) return <></>;
+  function costText(): string {
+    if (shares === null) return "";
     if (isNaN(shares) || shares <= 0) {
-      return <>ERROR: Invalid value entered for number of shares to buyback</>;
+      return "ERROR: Invalid value entered for number of shares to buyback";
     } else if (shares > corp.issuedShares) {
-      return (
-        <>
-          There are not this many shares available to buy back. There are only{" "}
-          {numeralWrapper.formatBigNumber(corp.issuedShares)} outstanding shares.
-        </>
-      );
+      return `There are not this many shares available to buy back. There are only ${nFormat(
+        corp.issuedShares,
+      )} outstanding shares.`;
     } else {
-      return (
-        <>
-          Purchase {shares} shares for a total of {numeralWrapper.formatMoney(shares * buybackPrice)}
-        </>
-      );
+      return `Purchase ${shares} shares for a total of ${formatMoney(shares * buybackPrice)}`;
     }
   }
 
@@ -76,10 +69,10 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
         To purchase these shares, you must use your own money (NOT your Corporation's funds).
         <br />
         <br />
-        The current buyback price of your company's stock is {numeralWrapper.formatMoney(buybackPrice)}. Your company
-        currently has {numeralWrapper.formatBigNumber(corp.issuedShares)} outstanding stock shares.
+        The current buyback price of your company's stock is {formatMoney(buybackPrice)}. Your company currently has{" "}
+        {nFormat(corp.issuedShares)} outstanding stock shares.
       </Typography>
-      <CostIndicator />
+      <Typography children={costText()} />
       <br />
       <NumberInput autoFocus={true} placeholder="Shares to buyback" onChange={setShares} onKeyDown={onKeyDown} />
       <Button disabled={disabled} onClick={buy}>

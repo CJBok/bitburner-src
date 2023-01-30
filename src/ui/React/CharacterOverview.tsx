@@ -4,7 +4,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import { Theme, useTheme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
-import { numeralWrapper } from "../numeralFormat";
+import { formatInt, formatMoney, nFormat } from "../numeralFormat";
 import { Reputation } from "./Reputation";
 import { KillScriptsModal } from "./KillScriptsModal";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
@@ -61,15 +61,15 @@ const valUpdaters: Record<RowName, () => any> = {
 
 //These formattedVals functions don't take in a value because of the weirdness around HP.
 const formattedVals: Record<RowName, () => string> = {
-  HP: () => `${numeralWrapper.formatHp(Player.hp.current)} / ${numeralWrapper.formatHp(Player.hp.max)}`,
-  Money: () => numeralWrapper.formatMoney(Player.money),
-  Hack: () => numeralWrapper.formatSkill(Player.skills.hacking),
-  Str: () => numeralWrapper.formatSkill(Player.skills.strength),
-  Def: () => numeralWrapper.formatSkill(Player.skills.defense),
-  Dex: () => numeralWrapper.formatSkill(Player.skills.dexterity),
-  Agi: () => numeralWrapper.formatSkill(Player.skills.agility),
-  Cha: () => numeralWrapper.formatSkill(Player.skills.charisma),
-  Int: () => numeralWrapper.formatSkill(Player.skills.intelligence),
+  HP: () => `${formatInt(Player.hp.current)} / ${formatInt(Player.hp.max)}`,
+  Money: () => formatMoney(Player.money),
+  Hack: () => nFormat(Player.skills.hacking),
+  Str: () => nFormat(Player.skills.strength),
+  Def: () => nFormat(Player.skills.defense),
+  Dex: () => nFormat(Player.skills.dexterity),
+  Agi: () => nFormat(Player.skills.agility),
+  Cha: () => nFormat(Player.skills.charisma),
+  Int: () => nFormat(Player.skills.intelligence),
 };
 
 const skillMultUpdaters: Record<SkillRowName, () => number> = {

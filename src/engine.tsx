@@ -5,6 +5,7 @@ import { initSourceFiles } from "./SourceFile/SourceFiles";
 import { initDarkWebItems } from "./DarkWeb/DarkWebItems";
 import { generateRandomContract } from "./CodingContractGenerator";
 import { initCompanies } from "./Company/Companies";
+import { initFormatters, nFormatLoaded } from "./ui/numeralFormat";
 import { CONSTANTS } from "./Constants";
 import { Factions, initFactions } from "./Faction/Factions";
 import { staneksGift } from "./CotMG/Helper";
@@ -44,9 +45,10 @@ import React from "react";
 import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
 import { Button, Typography } from "@mui/material";
 import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
+import { EventEmitter } from "./utils/EventEmitter";
 
 /** Game engine. Handles the main game loop. */
-const Engine: {
+export const Engine: {
   _lastUpdate: number;
   updateGame: (numCycles?: number) => void;
   Counters: {
@@ -226,6 +228,8 @@ const Engine: {
     // Load game from save or create new game
 
     if (loadGame(saveString)) {
+      initFormatters();
+      nFormatLoaded.emit();
       ThemeEvents.emit();
       initSourceFiles();
       initDarkWebItems();
@@ -369,6 +373,8 @@ const Engine: {
         250,
       );
     } else {
+      initFormatters();
+      nFormatLoaded.emit();
       // No save found, start new game
       initSourceFiles();
       initDarkWebItems();
@@ -433,4 +439,4 @@ function warnAutosaveDisabled(): void {
   SnackbarEvents.emit(warningToast, ToastVariant.WARNING, 5000);
 }
 
-export { Engine };
+export const GameLoad = new EventEmitter();

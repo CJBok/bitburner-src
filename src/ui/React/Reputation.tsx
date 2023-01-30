@@ -1,5 +1,5 @@
 import * as React from "react";
-import { numeralWrapper } from "../numeralFormat";
+import { nFormat } from "../numeralFormat";
 import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
@@ -15,8 +15,6 @@ const useStyles = makeStyles((theme: Theme) =>
 export function Reputation({ reputation }: { reputation: number | string }): React.ReactElement {
   const classes = useStyles();
   return (
-    <span className={classes.reputation}>
-      {typeof reputation === "number" ? numeralWrapper.formatReputation(reputation) : reputation}
-    </span>
+    <span className={classes.reputation}>{typeof reputation === "number" ? nFormat(reputation) : reputation}</span>
   );
 }

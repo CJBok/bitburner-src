@@ -13,31 +13,103 @@ import "numeral/locales/lv";
 import "numeral/locales/no";
 import "numeral/locales/pl";
 import "numeral/locales/ru";
+import { EventEmitter } from "../utils/EventEmitter";
 
 import { Settings } from "../Settings/Settings";
 
+/** List of all supported suffixes for each power of 1000. */
+const log1000suffixes = ["", "k", "m", "b", "t", "q", "Q", "s", "S", "o", "n"];
+
+// Number indexes are used for caching formatter for certain high-use digit counts.
+let formatters: Record<"smallInt" | "engineering", Intl.NumberFormat> &
+  Record<number, undefined | Intl.NumberFormat> & {
+    dynamic: (digits: number, options?: Intl.NumberFormatOptions) => Intl.NumberFormat;
+  };
+export function initFormatters() {
+  const { Locale, showTrailing0 } = Settings;
+  formatters = {} as typeof formatters;
+  /** Simple formatter for small integers */
+  formatters.smallInt = new Intl.NumberFormat([Locale, "en"]);
+  /** Engineering format for large numbers  */
+  formatters.engineering = new Intl.NumberFormat([Locale, "en"], {
+    notation: "engineering",
+    minimumFractionDigits: showTrailing0 ? 3 : 0,
+    maximumFractionDigits: 3,
+    // @ts-ignore using an experimental setting roundingMode that has no type declaration
+    roundingMode: "trunc",
+  });
+  /** Standard formatter for 3 digits */
+  formatters[3] = new Intl.NumberFormat([Locale, "en"], {
+    minimumFractionDigits: showTrailing0 ? 3 : 0,
+    maximumFractionDigits: 3,
+    // @ts-ignore using an experimental setting roundingMode that has no type declaration
+    roundingMode: "trunc",
+  });
+  /** Standard formatter for 2 digits (multipliers)*/
+  formatters[2] = new Intl.NumberFormat([Locale, "en"], {
+    minimumFractionDigits: showTrailing0 ? 3 : 0,
+    maximumFractionDigits: 3,
+    // @ts-ignore using an experimental setting roundingMode that has no type declaration
+    roundingMode: "trunc",
+  });
+  /** Formatter-creator when a preexisting formatter doesn't exist. */
+  formatters.dynamic = (digits, options = {}) =>
+    new Intl.NumberFormat([Locale, "en"], {
+      minimumFractionDigits: showTrailing0 ? digits : 0,
+      maximumFractionDigits: digits,
+      // @ts-ignore using an experimental setting roundingMode that has no type declaration
+      roundingMode: "trunc",
+      ...options,
+    });
+}
+
+export function nFormat(n: number, digits = 3, isInteger = false, isPercent = false): string {
+  if (isNaN(n)) return "NaN" + isPercent ? "%" : "";
+  if (isPercent) n *= 100; // Done before infinite check in case we are within 1/100 of infinity
+  if (!Number.isFinite(n)) return (n < 0 ? "-∞" : "∞") + isPercent ? "%" : "";
+  const nAbs = Math.abs(n);
+
+  // Percent always just shows the whole thing in standard notation.
+  if (isPercent) return (formatters[digits] || formatters.dynamic(digits)).format(n) + "%";
+
+  // Small numbers have special handling to allow an early exit and less math for this more common number type.
+  if (!n || nAbs < 1e3) {
+    return (isInteger ? formatters.smallInt : formatters[digits] || formatters.dynamic(digits)).format(n);
+  }
+
+  // Engineering notation for very large numbers.
+  if (nAbs >= 1e33) return formatters.engineering.format(n);
+
+  // Determine the correct suffix and display the number
+  const log1000 = Math.floor(Math.log(nAbs) / Math.log(1000));
+  n = n / 1000 ** log1000;
+  // A number with "error" as the suffix means there's an issue
+  return (formatters[digits] || formatters.dynamic(digits)).format(n) + (log1000suffixes[log1000] || "error");
+}
+
+export function formatMoney(n: number) {
+  return "$" + nFormat(n);
+}
+
+// Todo: Handle this differently to remove percentage handling in nFormat
+export function formatPercent(n: number, digits = 2) {
+  return nFormat(n, digits, false, true);
+}
+
+export function formatInt(n: number) {
+  return nFormat(n, 3, true);
+}
+
+// Todo: Ram formatting. Still using numeral for that.
+
+export const nFormatLoaded = new EventEmitter(); // For things that need to happen after initializing formatter
+
+// TODO: custom implementations for ram formatting and parsing custom number inputs. Get rid of numeralWrapper altogether.
 const extraFormats = [1e15, 1e18, 1e21, 1e24, 1e27, 1e30];
 const extraNotations = ["q", "Q", "s", "S", "o", "n"];
 const gigaMultiplier = { standard: 1e9, iec60027_2: 2 ** 30 };
 
 class NumeralFormatter {
-  // Default Locale
-  defaultLocale = "en";
-
-  constructor() {
-    this.defaultLocale = "en";
-  }
-
-  updateLocale(l: string): boolean {
-    if (numeral.locale(l) == null) {
-      console.warn(`Invalid locale for numeral: ${l}`);
-
-      numeral.locale(this.defaultLocale);
-      return false;
-    }
-    return true;
-  }
-
   format(n: number | string, format?: string): string {
     // numeral.js doesn't properly format numbers that are too big or too small
     if (Math.abs(n as number) < 1e-6) {
@@ -50,140 +122,12 @@ class NumeralFormatter {
     return answer;
   }
 
-  formatBigNumber(n: number | string): string {
-    return this.format(n, "0.000a");
-  }
-
-  // TODO: leverage numeral.js to do it. This function also implies you can
-  // use this format in some text field but you can't. ( "1t" will parse but
-  // "1s" will not)
-  formatReallyBigNumber(n: number | string, decimalPlaces = 3): string {
-    const nAbs = Math.abs(n as number);
-    if (n === Infinity) return "∞";
-    for (let i = 0; i < extraFormats.length; i++) {
-      if (extraFormats[i] <= nAbs && nAbs < extraFormats[i] * 1000) {
-        return this.format((n as number) / extraFormats[i], "0." + "0".repeat(decimalPlaces)) + extraNotations[i];
-      }
-    }
-    if (nAbs < 1000) {
-      return this.format(n, "0." + "0".repeat(decimalPlaces));
-    }
-    const str = this.format(n, "0." + "0".repeat(decimalPlaces) + "a");
-    if (str === "NaNt") return this.format(n, "0." + " ".repeat(decimalPlaces) + "e+0");
-    return str;
-  }
-
-  formatHp(n: number): string {
-    if (n < 1e6) {
-      return this.format(n, "0,0");
-    }
-    return this.formatReallyBigNumber(n);
-  }
-
-  formatMoney(n: number): string {
-    return "$" + this.formatReallyBigNumber(n);
-  }
-
-  formatSkill(n: number): string {
-    if (n < 1e15) {
-      return this.format(n, "0,0");
-    }
-    return this.formatReallyBigNumber(n);
-  }
-
-  formatExp(n: number): string {
-    return this.formatReallyBigNumber(n);
-  }
-
-  formatHashes(n: number): string {
-    return this.formatReallyBigNumber(n);
-  }
-
-  formatReputation(n: number): string {
-    return this.formatReallyBigNumber(n);
-  }
-
-  formatFavor(n: number): string {
-    return this.format(n, "0,0");
-  }
-
-  formatSecurity(n: number): string {
-    return n.toFixed(3);
-  }
-
+  // Don't have this implemented yet
   formatRAM(n: number): string {
     if (Settings.UseIEC60027_2) {
       return this.format(n * gigaMultiplier.iec60027_2, "0.00ib");
     }
     return this.format(n * gigaMultiplier.standard, "0.00b");
-  }
-
-  formatPercentage(n: number | string, decimalPlaces = 2): string {
-    const formatter: string = "0." + "0".repeat(decimalPlaces) + "%";
-    return this.format(n, formatter);
-  }
-
-  formatServerSecurity(n: number): string {
-    return this.format(n, "0,0.000");
-  }
-
-  formatRespect(n: number): string {
-    return this.formatReallyBigNumber(n, 5);
-  }
-
-  formatWanted(n: number): string {
-    return this.formatReallyBigNumber(n, 5);
-  }
-
-  formatMultiplier(n: number): string {
-    return this.format(n, "0,0.00");
-  }
-
-  formatSleeveShock(n: number): string {
-    return this.format(n, "0,0.000");
-  }
-
-  formatSleeveSynchro(n: number): string {
-    return this.format(n, "0,0.000");
-  }
-
-  formatSleeveMemory(n: number): string {
-    return this.format(n, "0");
-  }
-
-  formatPopulation(n: number): string {
-    return this.formatReallyBigNumber(n);
-  }
-
-  formatStamina(n: number): string {
-    return this.formatReallyBigNumber(n);
-  }
-
-  formatShares(n: number): string {
-    if (n < 1000) {
-      return this.format(n, "0");
-    }
-    return this.formatReallyBigNumber(n);
-  }
-
-  formatInfiltrationSecurity(n: number): string {
-    return this.formatReallyBigNumber(n);
-  }
-
-  formatThreads(n: number): string {
-    return this.format(n, "0,0");
-  }
-
-  formatStaneksGiftHeat(n: number): string {
-    return this.format(n, "0.000a");
-  }
-
-  formatStaneksGiftCharge(n: number): string {
-    return this.format(n, "0.000a");
-  }
-
-  formatStaneksGiftPower(n: number): string {
-    return this.format(n, "0.00");
   }
 
   parseCustomLargeNumber(str: string): number {

@@ -30,7 +30,7 @@ import {
   calculateGrowTime,
   calculateWeakenTime,
 } from "../Hacking";
-import { numeralWrapper } from "../ui/numeralFormat";
+import { formatMoney, formatPercent, nFormat, numeralWrapper } from "../ui/numeralFormat";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 
 // TODO: Does every terminal function really need its own file...?
@@ -224,21 +224,15 @@ export class Terminal {
       const newSec = server.hackDifficulty;
 
       this.print(
-        `Hack successful on '${server.hostname}'! Gained ${numeralWrapper.formatMoney(
-          moneyGained,
-        )} and ${numeralWrapper.formatExp(expGainedOnSuccess)} hacking exp`,
+        `Hack successful on '${server.hostname}'! Gained ${formatMoney(moneyGained)} and ${nFormat(
+          expGainedOnSuccess,
+        )} hacking exp`,
       );
-      this.print(
-        `Security increased on '${server.hostname}' from ${numeralWrapper.formatSecurity(
-          oldSec,
-        )} to ${numeralWrapper.formatSecurity(newSec)}`,
-      );
+      this.print(`Security increased on '${server.hostname}' from ${nFormat(oldSec)} to ${nFormat(newSec)}`);
     } else {
       // Failure
       Player.gainHackingExp(expGainedOnFailure);
-      this.print(
-        `Failed to hack '${server.hostname}'. Gained ${numeralWrapper.formatExp(expGainedOnFailure)} hacking exp`,
-      );
+      this.print(`Failed to hack '${server.hostname}'. Gained ${nFormat(expGainedOnFailure)} hacking exp`);
     }
   }
 
@@ -257,16 +251,11 @@ export class Terminal {
 
     Player.gainHackingExp(expGain);
     this.print(
-      `Available money on '${server.hostname}' grown by ${numeralWrapper.formatPercentage(
-        growth,
-        6,
-      )}. Gained ${numeralWrapper.formatExp(expGain)} hacking exp.`,
+      `Available money on '${server.hostname}' grown by ${formatPercent(growth, 6)}. Gained ${nFormat(
+        expGain,
+      )} hacking exp.`,
     );
-    this.print(
-      `Security increased on '${server.hostname}' from ${numeralWrapper.formatSecurity(
-        oldSec,
-      )} to ${numeralWrapper.formatSecurity(newSec)}`,
-    );
+    this.print(`Security increased on '${server.hostname}' from ${nFormat(oldSec)} to ${nFormat(newSec)}`);
   }
 
   finishWeaken(server: BaseServer, cancelled = false): void {
@@ -284,10 +273,9 @@ export class Terminal {
 
     Player.gainHackingExp(expGain);
     this.print(
-      `Security decreased on '${server.hostname}' from ${numeralWrapper.formatSecurity(
-        oldSec,
-      )} to ${numeralWrapper.formatSecurity(newSec)} (min: ${numeralWrapper.formatSecurity(server.minDifficulty)})` +
-        ` and Gained ${numeralWrapper.formatExp(expGain)} hacking exp.`,
+      `Security decreased on '${server.hostname}' from ${nFormat(oldSec)} to ${nFormat(newSec)} (min: ${nFormat(
+        server.minDifficulty,
+      )})` + ` and Gained ${nFormat(expGain)} hacking exp.`,
     );
   }
 
@@ -326,16 +314,14 @@ export class Terminal {
         const hackingSkill = currServ.requiredHackingSkill;
         this.print("Required hacking skill for hack() and backdoor: " + (!isHacknet ? hackingSkill : "N/A"));
         const security = currServ.hackDifficulty;
-        this.print("Server security level: " + (!isHacknet ? numeralWrapper.formatServerSecurity(security) : "N/A"));
+        this.print("Server security level: " + (!isHacknet ? nFormat(security) : "N/A"));
         const hackingChance = calculateHackingChance(currServ, Player);
-        this.print("Chance to hack: " + (!isHacknet ? numeralWrapper.formatPercentage(hackingChance) : "N/A"));
+        this.print("Chance to hack: " + (!isHacknet ? formatPercent(hackingChance) : "N/A"));
         const hackingTime = calculateHackingTime(currServ, Player) * 1000;
         this.print("Time to hack: " + (!isHacknet ? convertTimeMsToTimeElapsedString(hackingTime, true) : "N/A"));
       }
       this.print(
-        `Total money available on server: ${
-          currServ instanceof Server ? numeralWrapper.formatMoney(currServ.moneyAvailable) : "N/A"
-        }`,
+        `Total money available on server: ${currServ instanceof Server ? formatMoney(currServ.moneyAvailable) : "N/A"}`,
       );
       if (currServ instanceof Server) {
         const numPort = currServ.numOpenPortsRequired;

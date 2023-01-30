@@ -3,7 +3,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { TableCell, Tooltip, Typography } from "@mui/material";
 import { characterOverviewStyles } from "./CharacterOverview";
 import { ISkillProgress } from "src/PersonObjects/formulas/skill";
-import { numeralWrapper } from "../numeralFormat";
+import { nFormat } from "../numeralFormat";
 
 interface IProgressProps {
   min: number;
@@ -30,10 +30,10 @@ export function StatsProgressBar({
   const tooltip = (
     <Typography sx={{ textAlign: "right" }}>
       <strong>Progress:</strong>&nbsp;
-      {numeralWrapper.formatExp(current)} / {numeralWrapper.formatExp(max - min)}
+      {nFormat(current)} / {nFormat(max - min)}
       <br />
       <strong>Remaining:</strong>&nbsp;
-      {numeralWrapper.formatExp(remaining)} ({progress.toFixed(2)}%)
+      {nFormat(remaining)} ({progress.toFixed(2)}%)
     </Typography>
   );
 
