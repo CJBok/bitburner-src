@@ -4,7 +4,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import { Theme, useTheme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
-import { formatInt, formatMoney, nFormat } from "../numeralFormat";
+import { formatInt, formatMoney } from "../numeralFormat";
 import { Reputation } from "./Reputation";
 import { KillScriptsModal } from "./KillScriptsModal";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
@@ -63,13 +63,13 @@ const valUpdaters: Record<RowName, () => any> = {
 const formattedVals: Record<RowName, () => string> = {
   HP: () => `${formatInt(Player.hp.current)} / ${formatInt(Player.hp.max)}`,
   Money: () => formatMoney(Player.money),
-  Hack: () => nFormat(Player.skills.hacking),
-  Str: () => nFormat(Player.skills.strength),
-  Def: () => nFormat(Player.skills.defense),
-  Dex: () => nFormat(Player.skills.dexterity),
-  Agi: () => nFormat(Player.skills.agility),
-  Cha: () => nFormat(Player.skills.charisma),
-  Int: () => nFormat(Player.skills.intelligence),
+  Hack: () => formatInt(Player.skills.hacking),
+  Str: () => formatInt(Player.skills.strength),
+  Def: () => formatInt(Player.skills.defense),
+  Dex: () => formatInt(Player.skills.dexterity),
+  Agi: () => formatInt(Player.skills.agility),
+  Cha: () => formatInt(Player.skills.charisma),
+  Int: () => formatInt(Player.skills.intelligence),
 };
 
 const skillMultUpdaters: Record<SkillRowName, () => number> = {
